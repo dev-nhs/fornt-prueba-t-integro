@@ -1,1 +1,64 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Estilos generales */
+.form-container {
+    max-width: 80%;
+    margin: 0 auto;
+    margin-top: 80px;
+    padding: 20px;
+  }
+  
+  .form-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+  
+  .form-section h3 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  /* Estilos para los campos de entrada */
+  .mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .mat-input-element {
+    font-size: 16px;
+  }
+  
+  .mat-error {
+    color: #f44336;
+    font-size: 14px;
+  }
+  
+  /* Estilos para los botones */
+  .form-actions {
+    text-align: end;
+    margin-right: 150px;
+  }
+  
+  .form-actions button {
+    min-width: 150px;
+    margin: 1rem;
+  }
+  
+  /* Estilos responsivos */
+  @media (max-width: 600px) {
+    .form-container {
+      padding: 10px;
+    }
+  
+    .form-section {
+      padding: 10px;
+    }
+  }
+  mat-form-field{
+    padding: 2rem;
+  }
+  

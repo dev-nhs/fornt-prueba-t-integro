@@ -1,0 +1,119 @@
+<div class="form-container">
+  <!-- Datos del Paciente -->
+  <form [formGroup]="searchForm" (ngSubmit)="submitForm()">
+    <mat-checkbox (change)="toggleDisabled()" > Buscar por documento</mat-checkbox>
+    <mat-checkbox (change)="toggleDisabled2()" > Buscar por apellidos</mat-checkbox>
+    <section class="form-section" style="align-items: center; text-align: center; justify-content: center;">
+      <mat-form-field >
+        <mat-label>Tipo Documento</mat-label>
+        <mat-select matSelect formControlName="tipo_doc" required>
+          <mat-option *ngFor="let element of Documentos" [value]="element.id_tipo_documento_identidad">
+            {{ element.codigo_ieds }}
+          </mat-option>
+        </mat-select>
+        
+        <mat-error *ngIf="searchForm.get('tipo_doc')?.hasError('required')">
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field >
+        <mat-label>N° Documento</mat-label>
+        <input [disabled]="disabled" matInput formControlName="no_doc" required />
+        <mat-error *ngIf="searchForm.get('no_doc')?.hasError('required')">
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field [style.width.px]="450">
+        <mat-label>Apellidos</mat-label>
+        <input matInput formControlName="ape_pat_mat" required />
+        <mat-error *ngIf="searchForm.get('ape_pat_mat')?.hasError('required')">
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field >
+        <mat-label>Nombres</mat-label>
+        <input matInput formControlName="nombres" required />
+        <mat-error *ngIf="searchForm.get('nombres')?.hasError('required')">
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <div class="form-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="searchForm.invalid"
+        >
+          Buscar
+        </button>
+        <button mat-raised-button color="secondary" (click)="clearForm()">Limpiar</button>
+      </div>
+    </section>
+  </form>
+  <section class="form-section">
+        <h1>Pacientes</h1>
+    <div class="container" style="display: flex; justify-content: flex-end; margin-right: 2rem;">
+        <a href="/CrearPaciente">Registrar Paciente</a>
+      </div>
+    <div class="mat-elevation-z8" style="margin: 1rem;">
+        <table mat-table [dataSource]="dataSource">
+      
+          <!-- Position Column -->
+          <ng-container matColumnDef="no_apepat">
+            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+            <td mat-cell *matCellDef="let element"> {{element.no_apepat}} &nbsp;{{element.no_apemat}}&nbsp;{{element.no_nombres}}</td>
+          </ng-container>
+      
+          <!-- Name Column -->
+          <ng-container matColumnDef="codigo_ieds">
+            <th mat-header-cell *matHeaderCellDef> Tipo de Doc. </th>
+            <td mat-cell *matCellDef="let element"> {{element.codigo_ieds}} </td>
+          </ng-container>
+      
+          <!-- Weight Column -->
+          <ng-container matColumnDef="no_docide">
+            <th mat-header-cell *matHeaderCellDef> Numero de Doc. </th>
+            <td mat-cell *matCellDef="let element"> {{element.no_docide}} </td>
+          </ng-container>
+      
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="fe_nacimiento">
+            <th mat-header-cell *matHeaderCellDef> Fecha Nacimiento </th>
+            <td mat-cell *matCellDef="let element"> {{element.fe_nacimiento}} </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="fl_estado">
+            <th mat-header-cell *matHeaderCellDef> Estado </th>
+            <td mat-cell *matCellDef="let element"><mat-checkbox  [checked]="element.fl_estado === true"></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="editar">
+            <th mat-header-cell *matHeaderCellDef> Editar </th>
+            <td mat-cell *matCellDef="let element"> <span class="material-icons" style="color: chocolate; cursor: pointer;">edit</span></td>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="eliminar">
+            <th mat-header-cell *matHeaderCellDef> Eliminar </th>
+            <td mat-cell *matCellDef="let element"> <span class="material-icons"(click)="deletePaciente(element.id_paciente)"  style="color: brown; cursor: pointer;">delete</span></td>
+          </ng-container>
+
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                       showFirstLastButtons
+                       aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+      
+    </section>
+</div>

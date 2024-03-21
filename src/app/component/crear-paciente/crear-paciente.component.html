@@ -1,0 +1,474 @@
+<div class="form-container">
+  <!-- Datos del Paciente -->
+  <form [formGroup]="registroFormPaciente" (ngSubmit)="submitForms()">
+    <section class="form-section">
+      <h1>Datos del Paciente</h1>
+
+      <mat-form-field>
+        <mat-label>Tipo Documento</mat-label>
+        <mat-select matSelect formControlName="id_tipo_docide" required>
+          <mat-option
+            *ngFor="let element of Documentos"
+            [value]="element.id_tipo_documento_identidad"
+          >
+            {{ element.codigo_ieds }}
+          </mat-option>
+        </mat-select>
+
+        <mat-error
+          *ngIf="
+            registroFormPaciente.get('id_tipo_docide')?.hasError('required')
+          "
+        >
+        Tipo de documento. Es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>N° Documento</mat-label>
+        <input matInput formControlName="no_docide" required type="number"/>
+        <mat-error
+          *ngIf="registroFormPaciente.get('no_docide')?.hasError('required')"
+        >
+        Numero de documento. Es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Apellido Paterno</mat-label>
+        <input matInput formControlName="no_apepat" required />
+        <mat-error
+          *ngIf="registroFormPaciente.get('no_apepat')?.hasError('required')"
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Apellido Materno</mat-label>
+        <input matInput formControlName="no_apemat" required />
+        <mat-error
+          *ngIf="registroFormPaciente.get('no_apemat')?.hasError('required')"
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Nombres</mat-label>
+        <input matInput formControlName="no_nombres" required />
+        <mat-error
+          *ngIf="registroFormPaciente.get('no_nombres')?.hasError('required')"
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Sexo</mat-label>
+        <mat-select matSelect formControlName="id_sexo" required>
+          <mat-option *ngFor="let element of Sexo" [value]="element.id_sexo">
+            {{ element.descripcion_sexo }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="registroFormPaciente.get('id_sexo')?.hasError('required')"
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Fecha Nacimiento</mat-label>
+        <input
+          (dateChange)="
+            yearsDifferencePaciente = calculateYearsDifference($event.value)
+          "
+          matInput
+          [matDatepicker]="picker"
+          formControlName="fe_nacimiento"
+          required
+        />
+        <mat-error
+          *ngIf="
+            registroFormPaciente.get('fe_nacimiento')?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Edad</mat-label>
+        <input
+          type="number"
+          matInput
+          formControlName="edad"
+          value="{{ yearsDifferencePaciente }}"
+        />
+        <mat-error
+          *ngIf="registroFormPaciente.get('edad')?.hasError('required')"
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field [style.width.px]="450">
+        <mat-label>Lugar de Nacimiento</mat-label>
+        <input matInput formControlName="no_lugar_nacimiento" required />
+        <mat-error
+          *ngIf="
+            registroFormPaciente
+              .get('no_lugar_nacimiento')
+              ?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field [style.width.px]="490">
+        <mat-label>Dirección</mat-label>
+        <input matInput formControlName="no_direccion" required />
+        <mat-error
+          *ngIf="registroFormPaciente.get('no_direccion')?.hasError('required')"
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Departamento</mat-label>
+        <mat-select
+          matSelect
+          formControlName="depa"
+          required
+          (selectionChange)="filtrarProvincias($event, 'cbx_depa')"
+          id="cbx_depa"
+        >
+          <mat-option
+            *ngFor="let element of Depa"
+            [value]="element.codigo_departamento"
+          >
+            {{ element.descripcion_departamento }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="registroFormPaciente.get('depa')?.hasError('required')"
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Provincia</mat-label>
+        <mat-select
+          matSelect
+          formControlName="prov"
+          required
+          (selectionChange)="filtrarDistritos($event, 'cbx_prov')"
+          id="cbx_prov"
+        >
+          <mat-option
+            *ngFor="let element of Prov"
+            [value]="element.codigo_provincia"
+          >
+            {{ element.descripcion_provincia }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="registroFormPaciente.get('prov')?.hasError('required')"
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Distrito</mat-label>
+        <mat-select matSelect formControlName="dist" required>
+          <mat-option
+            *ngFor="let element of Dist"
+            [value]="element.codigo_distrito"
+          >
+            {{ element.descripcion_distrito }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="registroFormPaciente.get('dist')?.hasError('required')"
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+    </section>
+  </form>
+  <!-- Datos del Paciente Acompañante-->
+  <form [formGroup]="registroFormPacienteAcompanate" (ngSubmit)="submitForms()">
+    <section class="form-section">
+      <mat-checkbox (change)="toggleDisabled()">
+        Registar Acompañante</mat-checkbox
+      >
+      <h1>Datos del Acompañante</h1>
+
+      <mat-form-field>
+        <mat-label>Tipo Documento</mat-label>
+        <mat-select matSelect formControlName="id_tipo_docide" required>
+          <mat-option
+            *ngFor="let element of Documentos"
+            [value]="element.id_tipo_documento_identidad"
+          >
+            {{ element.codigo_ieds }}
+          </mat-option>
+        </mat-select>
+
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate
+              .get('id_tipo_docide')
+              ?.hasError('required')
+          "
+        >
+        Tipo de documento. Es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>N° Documento</mat-label>
+        <input matInput formControlName="no_docide" required type="number" />
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate
+              .get('no_docide')
+              ?.hasError('required')
+          "
+        >
+        Numero de documento. Es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Apellido Paterno</mat-label>
+        <input matInput formControlName="no_apepat" required />
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate
+              .get('no_apepat')
+              ?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Apellido Materno</mat-label>
+        <input matInput formControlName="no_apemat" required />
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate
+              .get('no_apemat')
+              ?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Nombres</mat-label>
+        <input matInput formControlName="no_nombres" required />
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate
+              .get('no_nombres')
+              ?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Fecha Nacimiento</mat-label>
+        <input
+          (dateChange)="
+            yearsDifferencePacienteAcompnante = calculateYearsDifference(
+              $event.value
+            )
+          "
+          matInput
+          [matDatepicker]="picker2"
+          formControlName="fe_nacimiento"
+          required
+        />
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate
+              .get('fe_nacimiento')
+              ?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker2"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Edad</mat-label>
+        <input
+          type="number"
+          matInput
+          formControlName="edad"
+          value="{{ yearsDifferencePacienteAcompnante }}"
+        />
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate.get('edad')?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Parentesco</mat-label>
+        <mat-select matSelect formControlName="id_parentesco" required>
+          <mat-option
+            *ngFor="let element of Parent"
+            [value]="element.id_parentesco"
+          >
+            {{ element.no_parentesco }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate
+              .get('id_parentesco')
+              ?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field [style.width.px]="450">
+        <mat-label>Telefono Contacto</mat-label>
+        <input matInput formControlName="nu_telefo_contacto" type="number" />
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate
+              .get('nu_telefo_contacto')
+              ?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field [style.width.px]="490">
+        <mat-label>Dirección</mat-label>
+        <input matInput formControlName="no_direccion" required />
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate
+              .get('no_direccion')
+              ?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Departamento</mat-label>
+        <mat-select
+          matSelect
+          formControlName="depa"
+          required
+          (selectionChange)="filtrarProvincias($event, 'cbx_depa2')"
+          id="cbx_depa2"
+        >
+          <mat-option
+            *ngFor="let element of Depa2"
+            [value]="element.codigo_departamento"
+          >
+            {{ element.descripcion_departamento }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate.get('depa')?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Provincia</mat-label>
+        <mat-select
+          matSelect
+          formControlName="prov"
+          required
+          (selectionChange)="filtrarDistritos($event, 'cbx_prov2')"
+          id="cbx_prov2"
+        >
+          <mat-option
+            *ngFor="let element of Prov2"
+            [value]="element.codigo_provincia"
+          >
+            {{ element.descripcion_provincia }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate.get('prov')?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Distrito</mat-label>
+        <mat-select matSelect formControlName="dist" required>
+          <mat-option
+            *ngFor="let element of Dist2"
+            [value]="element.codigo_distrito"
+          >
+            {{ element.descripcion_distrito }}
+          </mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="
+            registroFormPacienteAcompanate.get('dist')?.hasError('required')
+          "
+        >
+          Este campo es requerido
+        </mat-error>
+      </mat-form-field>
+    </section>
+    <!-- Agrega más campos según sea necesario -->
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="
+          registroFormPaciente.invalid || registroFormPacienteAcompanate.invalid
+        "
+      >
+        Guardar
+      </button>
+      <button mat-raised-button color="secondary">Canclear</button>
+    </div>
+  </form>
+</div>
+
+```
