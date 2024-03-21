@@ -71,11 +71,10 @@ export class ListarPacienteComponent implements OnInit, AfterViewInit {
   submitForm() {
     if (this.searchForm.valid) {
       this.service.searchPaciente(this.searchForm).subscribe((data) => {
-        if (data.length > 0) {
-          this.dataSource.data = data;
-        } else {
+        this.dataSource.data = data;
+        if (data.length <= 0) {
           this.alertError('Persona no registrada');
-        }
+        } 
       });
     }
   }

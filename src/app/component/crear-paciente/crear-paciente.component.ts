@@ -9,6 +9,7 @@ import { Provincia } from '../../model/provincia';
 import { Distrito } from '../../model/distrito';
 import { Parentesco } from '../../model/parentesco';
 import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-crear-paciente',
@@ -38,7 +39,7 @@ export class CrearPacienteComponent implements OnInit {
   Prov2: Provincia[] = [];
   Dist2: Distrito[] = [];
 
-  constructor(private fb: FormBuilder, private service: PacienteService) {}
+  constructor(private fb: FormBuilder, private service: PacienteService, private router: Router) {}
 
   ngOnInit(): void {
     this.fromValidationsPaciente();
@@ -64,21 +65,16 @@ export class CrearPacienteComponent implements OnInit {
 
   submitForms() {
     if (this.registroFormPaciente.valid) {
-      let _id_tipo_documento_identidad =
-        this.registroFormPaciente.value.id_tipo_docide;
+      let _id_tipo_documento_identidad = this.registroFormPaciente.value.id_tipo_docide;
       let _no_docide = this.registroFormPaciente.value.no_docide;
       let _no_apepat = this.registroFormPaciente.value.no_apepat;
       let _no_apemat = this.registroFormPaciente.value.no_apemat;
       let _no_nombres = this.registroFormPaciente.value.no_nombres;
       let _id_sexo = this.registroFormPaciente.value.id_sexo;
       let _fe_nacimiento = this.registroFormPaciente.value.fe_nacimiento;
-      let _no_lugar_nacimiento =
-        this.registroFormPaciente.value.no_lugar_nacimiento;
+      let _no_lugar_nacimiento =  this.registroFormPaciente.value.no_lugar_nacimiento;
       let _no_direccion = this.registroFormPaciente.value.no_direccion;
-      let _codigo_ubigeo =
-        this.registroFormPaciente.value.depa +
-        this.registroFormPaciente.value.prov +
-        this.registroFormPaciente.value.dist;
+      let _codigo_ubigeo = this.registroFormPaciente.value.depa + this.registroFormPaciente.value.prov + this.registroFormPaciente.value.dist;
 
       const pacienteData = {
         documento: {
@@ -98,88 +94,25 @@ export class CrearPacienteComponent implements OnInit {
       this.service.savePaciente(pacienteData).subscribe((data) => {
         console.log('Paciente registrado!');
         this.RegistrarPacienteAccompanante();
-        let message = 'Se registro correctamente';
-        this.alertSuccess(message);
+        this.alertSuccess('Se registró correctamente');
         this.clearForms();
       });
-/* 
-      if (this.registroFormPacienteAcompanate.valid) {
-        let _id_tipo_documento_identidad_ =
-          this.registroFormPacienteAcompanate.value.id_tipo_docide;
-        let _no_docide_ = this.registroFormPacienteAcompanate.value.no_docide;
-        let _no_apepat_ = this.registroFormPacienteAcompanate.value.no_apepat;
-        let _no_apemat_ = this.registroFormPacienteAcompanate.value.no_apemat;
-        let _no_nombres_ = this.registroFormPacienteAcompanate.value.no_nombres;
-        let _fe_nacimiento_ =
-          this.registroFormPacienteAcompanate.value.fe_nacimiento;
-        let _id_parentesco_ =
-          this.registroFormPacienteAcompanate.value.id_parentesco;
-        let _nu_telefo_contacto_ =
-          this.registroFormPacienteAcompanate.value.nu_telefo_contacto;
-        let _no_direccion_ =
-          this.registroFormPacienteAcompanate.value.no_direccion;
-        let _codigo_ubigeo_ =
-          this.registroFormPacienteAcompanate.value.depa +
-          this.registroFormPacienteAcompanate.value.prov +
-          this.registroFormPacienteAcompanate.value.dist;
 
-        const acompananteData = {
-          documento: {
-            id_tipo_documento_identidad: _id_tipo_documento_identidad_,
-          },
-          no_docide: _no_docide_,
-          no_apepat: _no_apepat_,
-          no_apemat: _no_apemat_,
-          no_nombres: _no_nombres_,
-          fe_nacimiento: _fe_nacimiento_,
-          parentesco: {
-            id_parentesco: _id_parentesco_,
-          },
-          nu_telefo_contacto: _nu_telefo_contacto_,
-          no_direccion: _no_direccion_,
-          ubigeo: {
-            codigo_ubigeo: _codigo_ubigeo_,
-          },
-        };
-        //console.log({ pacienteData, acompananteData });
-        
-
-        this.service
-          .savePacienteAcompanante(acompananteData, _no_docide)
-          .subscribe((data) => {
-            console.log('Paciente Acompañante registrado!');
-            let message = 'Se registro correctamente”';
-            this.alertSuccess(message);
-            this.clearForms();
-          });
-      } else {
-        let message = 'Se registro correctamente';
-        this.alertSuccess(message);
-        this.clearForms();
-      } */
     }
   }
 
   RegistrarPacienteAccompanante() {
     if (this.registroFormPacienteAcompanate.valid) {
-      let _id_tipo_documento_identidad_ =
-        this.registroFormPacienteAcompanate.value.id_tipo_docide;
+      let _id_tipo_documento_identidad_ = this.registroFormPacienteAcompanate.value.id_tipo_docide;
       let _no_docide_ = this.registroFormPacienteAcompanate.value.no_docide;
       let _no_apepat_ = this.registroFormPacienteAcompanate.value.no_apepat;
       let _no_apemat_ = this.registroFormPacienteAcompanate.value.no_apemat;
       let _no_nombres_ = this.registroFormPacienteAcompanate.value.no_nombres;
-      let _fe_nacimiento_ =
-        this.registroFormPacienteAcompanate.value.fe_nacimiento;
-      let _id_parentesco_ =
-        this.registroFormPacienteAcompanate.value.id_parentesco;
-      let _nu_telefo_contacto_ =
-        this.registroFormPacienteAcompanate.value.nu_telefo_contacto;
-      let _no_direccion_ =
-        this.registroFormPacienteAcompanate.value.no_direccion;
-      let _codigo_ubigeo_ =
-        this.registroFormPacienteAcompanate.value.depa +
-        this.registroFormPacienteAcompanate.value.prov +
-        this.registroFormPacienteAcompanate.value.dist;
+      let _fe_nacimiento_ = this.registroFormPacienteAcompanate.value.fe_nacimiento;
+      let _id_parentesco_ = this.registroFormPacienteAcompanate.value.id_parentesco;
+      let _nu_telefo_contacto_ = this.registroFormPacienteAcompanate.value.nu_telefo_contacto;
+      let _no_direccion_ = this.registroFormPacienteAcompanate.value.no_direccion;
+      let _codigo_ubigeo_ = this.registroFormPacienteAcompanate.value.depa + this.registroFormPacienteAcompanate.value.prov + this.registroFormPacienteAcompanate.value.dist;
 
       const acompananteData = {
         documento: {
@@ -207,8 +140,7 @@ export class CrearPacienteComponent implements OnInit {
         .savePacienteAcompanante(acompananteData, _no_docide)
         .subscribe((data) => {
           console.log('Acompañante registrado!');
-          let message = 'Se registro correctamente”';
-          this.alertSuccess(message);
+          this.alertSuccess('Se registró correctamente');
           this.clearForms();
         });
     } 
@@ -317,6 +249,10 @@ export class CrearPacienteComponent implements OnInit {
       icon: 'success',
       title: message,
     });
+  }
+  
+  routerLink() {
+    this.router.navigate(['./']);
   }
 
   clearForms() {
